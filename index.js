@@ -9,7 +9,7 @@ app.use(express.json());
 // Morgan combined format only for error responses (status codes 400 and above)
 const customMorgan = (tokens, req, res) => {
   const { name, number } = req.body;
-  console.log(req.body);
+
   return [
     `Server running on port ${PORT}`,
     [
