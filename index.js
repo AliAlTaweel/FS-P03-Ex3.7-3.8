@@ -1,15 +1,17 @@
+require("dotenv").config;
 const express = require("express");
+
 const morgan = require("morgan");
 const app = express();
+//const cors = require('cors')
 
 app.use(express.json());
-
+console.log("check01");
 // Morgan 'tiny' logger for all requests
 
 // Morgan combined format only for error responses (status codes 400 and above)
 const customMorgan = (tokens, req, res) => {
   const { name, number } = req.body;
-  console.log(req.body);
   return [
     `Server running on port ${PORT}`,
     [
@@ -23,19 +25,6 @@ const customMorgan = (tokens, req, res) => {
   ].join("\n"); // Join the port line and the details line with a newline
 };
 
-// EXAMPLE: only log error responses
-morgan("combined", {
-  skip: function (req, res) {
-    return res.statusCode < 400;
-  },
-});
-
-// EXAMPLE: only log error responses
-morgan("combined", {
-  skip: function (req, res) {
-    return res.statusCode < 400;
-  },
-});
 let persons = [
   {
     id: "1",
@@ -60,6 +49,7 @@ let persons = [
 ];
 //========== Middleware =========
 
+//app.use(cors())
 //=========== Routes =========
 //============ get ==============
 app.get("/api/persons", (req, res) => {
@@ -97,7 +87,7 @@ const generateId = () => {
   const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
   return maxId + 1;
 };
-app.use(morgan(customMorgan));
+//app.use(morgan(customMorgan));
 // ============= post ============
 
 app.post("/api/persons", (req, res) => {
@@ -121,6 +111,7 @@ app.post("/api/persons", (req, res) => {
 //========================================
 
 // ============= PORT & listen ============
-const PORT = 3001;
-app.listen(PORT);
-console.log(`Server running on port ${PORT}`);
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
